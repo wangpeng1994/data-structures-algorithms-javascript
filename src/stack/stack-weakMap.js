@@ -43,3 +43,5 @@ const Stack = (function() {
 
   return Stack;
 })();
+
+module.exports = Stack;
