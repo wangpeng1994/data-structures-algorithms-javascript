@@ -9,7 +9,11 @@ function LinkedList () {
   let length = 0;
   let head = null;
 
-  // 向链表尾部添加一个新的项
+  /**
+   * 向链表尾部添加一个新的项
+   *
+   * @param element
+   */
   this.append = function (element) {
 
     let node = new Node(element), current;
@@ -29,15 +33,18 @@ function LinkedList () {
     length++; // 更新链表长度
   };
 
-  this.size = function () {
-    return length;
-  };
-
-  // 从链表指定位置移除元素并返回被移除的元素
-  // 被移除的元素被丢弃在计算级内存中，等待被垃圾回收器清理
+  /**
+   * 从任意位置移除元素并返回被移除的元素
+   *
+   * 被移除的元素被丢弃在计算级内存中，等待被垃圾回收器清理
+   *
+   * @param {number} position
+   * @returns {element|null}
+   */
   this.removeAt = function (position) {
 
-    if (position > -1 && position < length) {
+    // 检查是否越界
+    if (position >= 0 && position < length) {
 
       let current = head,
         previous,
@@ -52,7 +59,7 @@ function LinkedList () {
           previous = current;
           current = current.next;
         }
-        // 上下节点进行链接，跳过当前节点，从而移除它
+        // 上下节点进行链接，跳过中间将被移除的 current 节点
         previous.next = current.next;
       }
 
@@ -64,16 +71,117 @@ function LinkedList () {
     }
   };
 
+  /**
+   * 在任意位置插入元素
+   *
+   * @param {number} position
+   * @param element
+   * @returns {boolean}
+   */
+  this.insert = function (position = 0, element) {
+
+    // 检查是否越界,注意这里包含了空链表时的情形
+    if (position >= 0 && position <= length) {
+
+      let node = new Node(element),
+        current = head,
+        previous,
+        index = 0;
+
+      if (position === 0) {
+        node.next = current;
+        head = node;
+      } else {
+        while (index++ < position) {
+          previous = current;
+          current = current.next;
+        }
+        node.next = current; // 即新元素插入到目标位置的前面
+        previous.next = node;
+      }
+
+      length++;
+
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  /**
+   * 把 LinkedList 对象转换成字符串
+   *
+   * @returns {string}
+   */
+  this.toString = function () {
+    let current = head,
+      string = '',
+      index = 0;
+
+    while (current) {
+      string += index++ + ': ' + current.element + (current.next ? '\n' : '');
+      current = current.next;
+    }
+    return string;
+  };
+
+  /**
+   * 查找给定元素的索引,找不到则返回 -1
+   *
+   * @param element
+   * @returns {number}
+   */
+  this.indexOf = function (element) {
+
+    let current = head,
+      index = -1;
+
+    while (current) {
+      index++;
+      if (element === current.element) {
+        return index;
+      }
+      current = current.next;
+    }
+
+    return -1;
+  };
+
+  /**
+   * 移除给定位置的元素
+   *
+   * @param element
+   * @returns {element|null}
+   */
+  this.remove = function (element) {
+    const index = this.indexOf(element);
+    return this.removeAt(index);
+  };
+
+  /**
+   * 链表是否为空
+   * @returns {boolean}
+   */
+  this.isEmpty = function () {
+    return length === 0;
+  };
+
+  /**
+   * 链表大小
+   * @returns {number}
+   */
+  this.size = function () {
+    return length;
+  };
+
+  /**
+   * 获取表头
+   *
+   * 方便实例外部访问和迭代链表
+   *
+   * @returns {element|null}
+   */
+  this.getHead = function () {
+    return head;
+  };
 }
-
-/* --------------- test ------------------ */
-
-let list = new LinkedList();
-list.append(10);
-list.append(50);
-list.append(20);
-list.removeAt(2);
-console.log(list.removeAt(1));
-list.removeAt(0);
-
-console.log(list.size());
