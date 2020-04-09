@@ -39,3 +39,5 @@ const Queue = (function () {
 
   return Queue;
 })();
+
+module.exports = Queue;
