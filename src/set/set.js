@@ -73,4 +73,81 @@ function Set () {
   this.values = function () {
     return Object.keys(items).map(key => items[key]);
   };
+
+  /**
+   * 求并集 A∪B
+   *
+   * @param otherSet
+   */
+  this.union = function (otherSet) {
+    let unionSet = new Set();
+
+    let values = this.values();
+    values.forEach(value => unionSet.add(value));
+
+    values = otherSet.values();
+    values.forEach(value => unionSet.add(value));
+
+    return unionSet;
+  };
+
+  /**
+   * 求交集 A∩B
+   *
+   * @param otherSet
+   * @returns {Set}
+   */
+  this.intersection = function (otherSet) {
+    let intersectionSet = new Set();
+
+    let values = this.values();
+    values.forEach(value => {
+      if (otherSet.has(value)) {
+        intersectionSet.add(value);
+      }
+    });
+
+    return intersectionSet;
+  };
+
+  /**
+   * 求差集 A-B
+   *
+   * @param otherSet
+   * @returns {Set}
+   */
+  this.difference = function (otherSet) {
+    let differenceSet = new Set();
+
+    let values = this.values();
+    values.forEach(value => {
+      if (!otherSet.has(value)) {
+        differenceSet.add(value);
+      }
+    });
+
+    return differenceSet;
+  };
+
+  /**
+   * 判断A是否是B的子集
+   *
+   * @param otherSet
+   * @returns {boolean}
+   */
+  this.subset = function (otherSet) {
+
+    if (this.size() > otherSet.size()) {
+      return false;
+    } else {
+      let values = this.values();
+      for (let i = 0; i < values.length; i++) {
+        if (!otherSet.has(values[i])) {
+          return false;
+        }
+      }
+      return true;
+    }
+  };
+
 }
