@@ -1,4 +1,4 @@
-function DoublyLinkedList () {
+function DoublyLinkedList() {
 
   let Node = function (element) {
     this.element = element;
@@ -9,52 +9,6 @@ function DoublyLinkedList () {
   let length = 0;
   let head = null;
   let tail = null;
-
-  /**
-   * 从任意位置添加节点
-   *
-   * @param {number} position
-   * @param element
-   * @returns {boolean}
-   */
-  this.insert = function (position, element) {
-
-    if (position >= 0 && position <= length) {
-
-      let node = new Node(element),
-        current = head,
-        previous,
-        index = 0;
-
-      if (position === 0) {
-
-        if (!head) { // 第一项
-          head = node;
-          tail = node;
-        } else if (position === length) { // 最后一项
-          current = tail;
-          current.next = node;
-          node.prev = current;
-          tail = node;
-        } else {
-          while (index++ < position) {
-            previous = current;
-            current = current.next;
-          }
-          previous.next = node;
-          node.next = current;
-          current.prev = node;
-          node.prev = previous;
-        }
-
-        length++;
-
-        return true;
-      } else {
-        return false;
-      }
-    }
-  };
 
   /**
    * 从任意位置移除元素
@@ -99,4 +53,52 @@ function DoublyLinkedList () {
     }
   };
 
+  /**
+   * 从任意位置添加节点
+   *
+   * @param {number} position
+   * @param element
+   * @returns {boolean}
+   */
+  this.insert = function (position, element) {
+
+    if (position >= 0 && position <= length) {
+
+      let node = new Node(element),
+        current = head,
+        previous,
+        index = 0;
+
+      if (position === 0) { // 在第一个位置添加
+        if (!head) { // 当前链表为空
+          head = node;
+          tail = node;
+        } else {
+          node.next = current;
+          current.prev = node;
+          head = node;
+        }
+      } else if (position === length) { // 最后一项
+        current = tail;
+        current.next = node;
+        node.prev = current;
+        tail = node;
+      } else {
+        while (index++ < position) {
+          previous = current;
+          current = current.next;
+        }
+        previous.next = node;
+        node.next = current;
+        current.prev = node;
+        node.prev = previous;
+      }
+
+      length++;
+
+      return true;
+    } else {
+      return false;
+    }
+  };
 }

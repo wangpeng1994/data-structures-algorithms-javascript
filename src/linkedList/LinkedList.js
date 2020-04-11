@@ -1,13 +1,13 @@
-function LinkedList () {
+function LinkedList() {
 
-  // 单个节点类
+  // 单个节点类，表示要加入到链表中的项
   let Node = function (element) {
     this.element = element;
     this.next = null;
   };
 
-  let length = 0;
-  let head = null;
+  let length = 0; // 内部私有变量，记录链表长度
+  let head = null; // 头指针
 
   /**
    * 向链表尾部添加一个新的项
@@ -35,8 +35,8 @@ function LinkedList () {
 
   /**
    * 从任意位置移除元素并返回被移除的元素
-   *
-   * 被移除的元素被丢弃在计算级内存中，等待被垃圾回收器清理
+   * 两种场景：移除第一个元素；移除第一个以外的任一元素。
+   * 被移除的元素被丢弃在计算机内存中，等待被垃圾回收器清理。
    *
    * @param {number} position
    * @returns {element|null}
@@ -96,7 +96,7 @@ function LinkedList () {
           previous = current;
           current = current.next;
         }
-        node.next = current; // 即新元素插入到目标位置的前面
+        node.next = current; // 即新元素插入到目标位置的前面，这里current可能是null
         previous.next = node;
       }
 
@@ -176,7 +176,6 @@ function LinkedList () {
 
   /**
    * 获取表头
-   *
    * 方便实例外部访问和迭代链表
    *
    * @returns {element|null}

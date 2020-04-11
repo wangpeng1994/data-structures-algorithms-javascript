@@ -9,19 +9,19 @@ const PriorityQueue = (function () {
    * 队列元素能包含优先级信息
    */
   class QueueElement {
-    constructor (element, priority) {
+    constructor(element, priority) {
       this.element = element;
       this.priority = priority;
     }
   }
 
   class Queue {
-    constructor () {
+    constructor() {
       items.set(this, []);
     }
 
     // 最小优先队列（queueElement.priority < q[i].priority）
-    enqueue (element, priority = 0) {
+    enqueue(element, priority = 0) {
       if (element === undefined) {
         throw new Error('参数非法');
       }
@@ -41,7 +41,7 @@ const PriorityQueue = (function () {
     }
 
     // 最大优先队列（queueElement.priority > q[i].priority）
-    enqueue2 (element, priority = 0) {
+    enqueue2(element, priority = 0) {
       if (element === undefined) {
         throw new Error('参数非法');
       }
@@ -60,27 +60,27 @@ const PriorityQueue = (function () {
       }
     }
 
-    dequeue () {
+    dequeue() {
       const q = items.get(this);
       return q.shift();
     }
 
-    front () {
+    front() {
       const q = items.get(this);
       return q[0];
     }
 
-    isEmpty () {
+    isEmpty() {
       const q = items.get(this);
       return q.length === 0;
     }
 
-    size () {
+    size() {
       const q = items.get(this);
       return q.length;
     }
 
-    print () {
+    print() {
       const q = items.get(this);
       q.forEach(item => {
         console.log(`${item.element} - ${item.priority}`);

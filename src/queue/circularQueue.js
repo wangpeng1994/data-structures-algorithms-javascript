@@ -11,7 +11,7 @@ const Queue = require('./queue-weakMap');
  * @param num 循环次数
  * @returns {*} 获胜者
  */
-function hotPotato (nameList = [], num) {
+function hotPotato(nameList = [], num) {
   const queue = new Queue();
 
   for (let i = 0; i < nameList.length; i++) {
@@ -24,7 +24,7 @@ function hotPotato (nameList = [], num) {
   while (queue.size() > 1) {
     // 没循环滚动 num 次后，淘汰一名
     for (let i = 0; i < num; i++) {
-      queue.enqueue(queue.dequeue()); // 循环队列关键之处
+      queue.enqueue(queue.dequeue()); // 没停止滚动前，会重新进入队列，所以暂时不会被淘汰
     }
     eliminated = queue.dequeue();
     console.log(eliminated + '在游戏中被淘汰！');

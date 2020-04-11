@@ -1,6 +1,6 @@
 // https://leetcode.com/problems/design-hashset/
 
-// 不适用任何内建的哈希表库，设计一个 HashSet
+// 不使用任何内建的哈希表库，设计一个 HashSet
 
 // add(value): Insert a value into the HashSet.
 // contains(value) : Return whether the value exists in the HashSet or not.

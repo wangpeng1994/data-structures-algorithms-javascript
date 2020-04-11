@@ -30,6 +30,8 @@
 // }
 
 /**
+ * 判断括号是否匹配
+ *
  * @param {string} s
  * @return {boolean}
  */

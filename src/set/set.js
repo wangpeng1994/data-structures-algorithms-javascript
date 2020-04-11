@@ -8,7 +8,7 @@
  * values() 返回一个包含集合中所有元素的数组
  */
 
-function Set () {
+function Set() {
   let items = {};
 
   /**

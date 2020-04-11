@@ -1,4 +1,4 @@
-const Stack = (function() {
+const Stack = (function () {
   const items = new WeakMap();
 
   class Stack {

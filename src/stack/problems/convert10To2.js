@@ -1,4 +1,4 @@
-const Stack = require('./stack-weakMap');
+const Stack = require('../stack-weakMap');
 
 /**
  * 十进制数字和2整除，直至结果是0，然后反向输出余数，得到转换后的二进制
