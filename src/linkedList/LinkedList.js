@@ -148,7 +148,7 @@ function LinkedList() {
   };
 
   /**
-   * 移除给定位置的元素
+   * 移除给定的元素
    *
    * @param element
    * @returns {element|null}
