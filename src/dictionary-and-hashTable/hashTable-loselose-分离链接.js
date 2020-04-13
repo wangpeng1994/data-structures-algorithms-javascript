@@ -1,6 +1,10 @@
 /**
  * 解决hash冲突: 分离链接法
  *
+ * 以下实现中是本人基于书中进行改良，推荐！
+ * 当发生hash碰撞时，或者重复的key时，都会向表头添加键值对，
+ * 即使key重复，当get时也能就近获取最近一次设置的value
+ *
  * @constructor
  */
 function HashTable() {
@@ -14,7 +18,7 @@ function HashTable() {
     return hash % 37;
   };
 
-  // 键值对副助类
+  // 键值对辅助类
   var ValuePair = function (key, value) {
     this.key = key;
     this.value = value;
@@ -57,7 +61,7 @@ function HashTable() {
       while (current) {
         if (current.element.key === key) {
           table[position].remove(current.element);
-          if (table[position].isEmpty()) {
+          if (table[position].isEmpty()) { // 不留下空链表
             table[position] = undefined;
           }
           return true;

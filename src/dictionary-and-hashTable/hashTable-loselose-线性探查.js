@@ -1,6 +1,8 @@
 /**
- * 散列表，基于 lose lose 哈希算法
- * 键需要是字符串，值可以是任意类型
+ * 解决hash冲突: 线性探查法
+ *
+ * 以下纯粹来自书中实现，但其实有不少问题，不推荐！
+ *
  * @constructor
  */
 
@@ -21,7 +23,7 @@ function HashTable() {
     return hash % 37;
   };
 
-  // 键值对副助类
+  // 键值对辅助类
   var ValuePair = function (key, value) {
     this.key = key;
     this.value = value;
@@ -46,16 +48,50 @@ function HashTable() {
         index++;
       }
       table[index] = pair;
-
     }
   };
 
   this.get = function (key) {
-    return table[loseloseHashCode(key)];
+    var position = loseloseHashCode(key);
+
+    if (table[position] !== undefined) {
+      if (table[position].key === key) {
+        return table[position].value;
+      } else {
+        var index = ++position;
+        while (
+          table[index] === undefined ||
+          table[index].key !== key
+          ) {
+          index++;
+        }
+        if (table[index].key === key) {
+          return table[index].value;
+        }
+      }
+    }
+    return undefined;
   };
 
   this.remove = function (key) {
-    table[loseloseHashCode(key)] = undefined;
+    var position = loseloseHashCode(key);
+
+    if (table[position] !== undefined) {
+      if (table[position].key === key) {
+        table[position] = undefined;
+      } else {
+        var index = ++position;
+        while (
+          table[index] === undefined ||
+          table[index].key !== key
+          ) {
+          index++;
+        }
+        if (table[index].key === key) {
+          table[index] = undefined;
+        }
+      }
+    }
   };
 
   // 纯粹为了验证table

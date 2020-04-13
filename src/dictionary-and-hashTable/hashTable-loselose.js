@@ -10,13 +10,13 @@ function HashTable() {
   /**
    * 散列函数 lose lose
    *
-   * @param key
+   * @param {string} key
    * @returns {number}
    */
   var loseloseHashCode = function (key) {
     var hash = 0;
     for (var i = 0; i < key.length; i++) {
-      hash += key.charCodeAt(i);
+      hash += key.charCodeAt(i); // 将键值中的每个字母的ASCII值相加
     }
     return hash % 37; // 为了得到较小的值，和一个数取余，最后数组的存储范围是 0~36
   };
