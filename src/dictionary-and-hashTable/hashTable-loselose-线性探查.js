@@ -18,13 +18,36 @@ function HashTable() {
     for (var i = 0; i < key.length; i++) {
       hash += key.charCodeAt(i);
     }
-    return hash % 37; // 为了得到较小的值，和一个数取余，最后数组的存储范围是 0~36
+    return hash % 37;
+  };
+
+  // 键值对副助类
+  var ValuePair = function (key, value) {
+    this.key = key;
+    this.value = value;
+
+    this.toString = function () {
+      return '[' + this.key + ' - ' + this.value + ']';
+    };
   };
 
   this.put = function (key, value) {
     var position = loseloseHashCode(key);
     console.log(position + ' - ' + key);
-    table[position] = value;
+
+    var pair = new ValuePair(key, value);
+
+    // 当目标位置被占用时尝试position++的位置
+    if (table[position] === undefined) {
+      table[position] = pair;
+    } else {
+      var index = ++position;
+      while (table[index] !== undefined) {
+        index++;
+      }
+      table[index] = pair;
+
+    }
   };
 
   this.get = function (key) {
