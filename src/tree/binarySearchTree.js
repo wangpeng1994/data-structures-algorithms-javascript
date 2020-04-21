@@ -1,4 +1,4 @@
-function BinarySearchTree () {
+function BinarySearchTree() {
 
   var Node = function (key) {
     this.key = key;
@@ -125,7 +125,7 @@ function BinarySearchTree () {
   /////////////////////////////////////////////////////////
 
   /**
-   * 最小值辅助函数
+   * 最小值辅助函数, 可以从任意节点开始查找
    * @param node 指针
    * @returns {null|*}
    */
@@ -151,7 +151,7 @@ function BinarySearchTree () {
   /////////////////////////////////////////////////////////
 
   /**
-   * 最大值辅助函数
+   * 最大值辅助函数，可以从任意节点开始查找
    * @param node 指针
    * @returns {null|*}
    */
@@ -211,21 +211,73 @@ function BinarySearchTree () {
 
   /////////////////////////////////////////////////////////
 
+  /**
+   * 寻找最小节点的辅助函数
+   *
+   * @param node
+   * @returns {*}
+   */
+  var findMinNode = function (node) {
+    while (node && node.left) {
+      node = node.left;
+    }
+    return node;
+  };
+
+  /**
+   * 移除指定节点的辅助函数
+   *
+   * @param node
+   * @param key
+   * @returns {null|*} 总是返回处理后的节点
+   */
   var removeNode = function (node, key) {
 
     // 键不存在于树中
     if (node === null) {
       return null;
     }
-    // 在树中找到要移除的节点，小于当前节点key向左找，大于则向右找
+    // 在树中找到要移除的节点，小于当前节点向左找，大于当前节点向右找
     // 并更新节点左右指针的值
     if (key < node.key) {
+      node.left = removeNode(node.left, key);
+      return node;
 
+    } else if (key > node.key) {
+      node.right = removeNode(node.right, key);
+      return node;
+
+    } else { // 找到键值符合的节点，准备分情况移除节点，移花接木
+
+      // 移除的是叶子节点（没有左右子节点）
+      if (node.left === null && node.right === null) {
+        node = null;
+        return node;
+      }
+
+      // 只有一个或左或右子节点的节点
+      if (node.left === null) {
+        node = node.right;
+        return node;
+      } else if (node.right === null) {
+        node = node.left;
+        return node;
+      }
+
+      // 最后一种情况是有两个子节点的节点
+      var aux = findMinNode(node.right); // 找到目标节点右子树种最小的节点
+      node.key = aux.key; // 用其值更新打算"删除"的节点的值，虽然实际还是刚才的节点，但逻辑上当做被删除了
+      node.right = removeNode(node.right, aux.key); // 右子树最小的节点已经被"挪动"用于填补"删除"的空缺，所以现在再把这个最小的节点删除
+      return node;
     }
   };
 
+  /**
+   * 根据指定键移除节点
+   *
+   * @param key
+   */
   this.remove = function (key) {
     root = removeNode(root, key);
   };
-
 }
