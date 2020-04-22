@@ -1,4 +1,4 @@
-function Graph () {
+function Graph() {
 
   var vertices = []; // 存储所有顶点
   var adjList = new Dictionary();
@@ -89,6 +89,47 @@ function Graph () {
     }
   };
 
+  /**
+   * 改进版 BFS，可求最短路径
+   *
+   * @param v 起始顶点
+   * @returns {{distances: {}, predecessors: {}}} 返回距离和前溯点信息
+   */
+  this.BFS = function (v) {
+
+    var color = initializeColor();
+    var queue = new Queue();
+    var d = {}, pred = {}; // d 记录每个顶点到源的距离（边数），pred 记录每个顶点的前溯点
+    queue.enqueue(v);
+
+    // 初始化距离和前溯点
+    for (var i = 0; i < vertices.length; i++) {
+      d[vertices[i]] = 0;
+      pred[vertices[i]] = null;
+    }
+
+    while (!queue.isEmpty()) {
+      var u = queue.dequeue();
+      var neighbors = adjList.get(u);
+      color[u] = 'grey';
+      for (var i = 0; i < neighbors.length; i++) {
+        var w = neighbors[i];
+        if (color[w] === 'white') {
+          color[w] = 'grey';
+          queue.enqueue(w);
+          d[w] = d[u] + 1; // 设置 vw 距离
+          pred[w] = u; // 设置 w 前溯点
+        }
+      }
+      color[u] = 'black';
+    }
+
+    return {
+      distances: d,
+      predecessors: pred
+    };
+  };
+
 }
 
 // 测试
@@ -109,3 +150,23 @@ graph.addEdge('B', 'F');
 graph.addEdge('E', 'I');
 
 graph.bfs(myVertices[0], console.log); // A B C D E F G H I
+
+/*
+ 演示 BFS 求最短路径
+ */
+var shortestPathA = graph.BFS(myVertices[0]);
+console.log(shortestPathA);
+var fromVertex = myVertices[0];
+for (var i = 1; i < myVertices.length; i++) {
+  var toVertex = myVertices[i];
+  var path = new Stack();
+  for (var v = toVertex; v !== fromVertex; v = shortestPathA.predecessors[v]) {
+    path.push(v);
+  }
+  path.push(fromVertex);
+  var s = path.pop();
+  while (!path.isEmpty()) {
+    s += ' - ' + path.pop();
+  }
+  console.log(s);
+}
