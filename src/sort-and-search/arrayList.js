@@ -1,3 +1,5 @@
+// 排序算法可视化：https://visualgo.net/bn/sorting
+
 /**
  * 数组列表
  */
@@ -9,33 +11,46 @@ const ArrayList = (function () {
     let aux = a[i1];
     a[i1] = a[i2];
     a[i2] = aux;
+    // [a[i1], a[i2]] = [a[i2], a[i1]] // ES6
   };
 
   return class {
-    constructor (props) {
+    constructor(props) {
       arrays.set(this, []);
     }
 
-    insert (item) {
+    insert(item) {
       arrays.get(this).push(item);
     }
 
-    toString () {
+    toString() {
       return arrays.get(this).join();
     }
 
-    bubbleSort () {
+    /**
+     * 冒泡排序
+     */
+    bubbleSort() {
       const a = arrays.get(this);
-      while (true) {
-        let count = 0;
-        for (let i = 0; i < a.length - 1; i++) {
-          if (a[i] > a[i + 1]) {
-            swap(a, i, i + 1);
-            count++;
+      for (let i = 0; i < a.length; i++) {
+        for (let j = 0; j < a.length - 1; j++) {
+          if (a[j] > a[j + 1]) {
+            swap(a, j, j + 1);
           }
         }
-        if (count === 0) {
-          break;
+      }
+    }
+
+    /**
+     * 改进后的冒泡排序
+     */
+    bubbleSortPro() {
+      const a = arrays.get(this);
+      for (let i = 0; i < a.length; i++) {
+        for (let j = 0; j < a.length - 1 - i; j++) {
+          if (a[j] > a[j + 1]) {
+            swap(a, j, j + 1);
+          }
         }
       }
     }
@@ -43,3 +58,16 @@ const ArrayList = (function () {
 })();
 
 module.exports = ArrayList;
+
+function createNonSortedArray(size) {
+  const array = new ArrayList();
+  for (let i = size; i > 0; i--) {
+    array.insert(i);
+  }
+  return array;
+}
+
+const array = createNonSortedArray(10);
+console.log(array.toString());
+array.bubbleSort();
+console.log(array.toString());
