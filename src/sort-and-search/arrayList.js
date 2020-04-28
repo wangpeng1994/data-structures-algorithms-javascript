@@ -5,7 +5,7 @@
  */
 const ArrayList = (function () {
   // 类内部私有变量
-  const array = new WeakMap();
+  const arrays = new WeakMap();
   // 类内部私有方法
   const swap = (a, i1, i2) => {
     // let aux = a[i1];
@@ -14,24 +14,53 @@ const ArrayList = (function () {
     [a[i1], a[i2]] = [a[i2], a[i1]]; // ES6
   };
 
+  const mergeSortRec = (a) => {
+    const length = a.length;
+    if (length === 1) {
+      return a;
+    }
+    const mid = Math.floor(length / 2),
+      left = a.slice(0, mid),
+      right = a.slice(mid, length);
+    return merge(mergeSortRec(left), mergeSortRec(right));
+  };
+
+  const merge = (left, right) => {
+    let il = 0, ir = 0, result = [];
+    while (il < left.length && ir < right.length) {
+      if (left[il] <= right[ir]) {
+        result.push(left[il++]);
+      } else {
+        result.push(right[ir++]);
+      }
+    }
+    while (il < left.length) {
+      result.push(left[il++]);
+    }
+    while (ir < right.length) {
+      result.push(right[ir++]);
+    }
+    return result;
+  };
+
   return class {
     constructor(props) {
-      array.set(this, []);
+      arrays.set(this, []);
     }
 
     insert(item) {
-      array.get(this).push(item);
+      arrays.get(this).push(item);
     }
 
     toString() {
-      return array.get(this).join();
+      return arrays.get(this).join();
     }
 
     /**
      * 冒泡排序 O(n^2)
      */
     bubbleSort() {
-      const a = array.get(this);
+      const a = arrays.get(this);
       for (let i = 0; i < a.length; i++) {
         for (let j = 0; j < a.length - 1; j++) {
           if (a[j] > a[j + 1]) {
@@ -45,7 +74,7 @@ const ArrayList = (function () {
      * 改进后的冒泡排序 O(n^2)
      */
     bubbleSortPro() {
-      const a = array.get(this);
+      const a = arrays.get(this);
       for (let i = 0; i < a.length; i++) {
         for (let j = 0; j < a.length - 1 - i; j++) {
           if (a[j] > a[j + 1]) {
@@ -59,7 +88,7 @@ const ArrayList = (function () {
      * 选择排序 O(n^2)
      */
     selectionSort() {
-      const a = array.get(this);
+      const a = arrays.get(this);
       let length = a.length, indexMin;
       for (let i = 0; i < length - 1; i++) { // 重复 元素个数-1 次
         indexMin = i; // 把第一个没有排序过的元素设置为最小值
@@ -78,7 +107,7 @@ const ArrayList = (function () {
      * 插入排序 O(n^2)
      */
     insertionSort() {
-      const a = array.get(this);
+      const a = arrays.get(this);
       let length = a.length, j, temp;
       for (let i = 1; i < length; i++) { // 假设第一项已排序
         j = i;
@@ -89,6 +118,14 @@ const ArrayList = (function () {
         }
         a[j] = temp;
       }
+    }
+
+    /**
+     * 归并排序
+     */
+    mergeSort() {
+      const array = mergeSortRec(arrays.get(this));
+      arrays.set(this, array);
     }
   };
 })();
@@ -103,7 +140,14 @@ function createNonSortedArray(size) {
   return array;
 }
 
-const array = createNonSortedArray(10);
+console.log(Date());
+const array = createNonSortedArray(100000); // 10w条数据
 console.log(array.toString());
-array.insertionSort();
+// array.bubbleSort(); // 18.712066719
+// array.bubbleSortPro(); // 15.460200022
+// array.selectionSort(); // 5.793334085
+// array.insertionSort(); // 5.17506965
+array.mergeSort(); // 1.26896726
 console.log(array.toString());
+
+console.log(process.uptime());
